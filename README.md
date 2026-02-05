@@ -49,12 +49,14 @@ The converter handles:
 ## Usage
 
 ```bash
-# Basic usage
+# Basic usage - creates separate .ics files for each list in the same directory as the input
 python rtm_to_nextcloud.py rtm_export.json
 
-# Specify output file
-python rtm_to_nextcloud.py rtm_export.json my_tasks.ics
+# Specify output directory
+python rtm_to_nextcloud.py rtm_export.json /path/to/output/directory
 ```
+
+The converter creates a separate `.ics` file for each RTM list, allowing you to import them as separate task lists in Nextcloud.
 
 ## Exporting from RTM
 
@@ -68,20 +70,31 @@ python rtm_to_nextcloud.py rtm_export.json my_tasks.ics
 1. Open Nextcloud Calendar app
 2. Click **Settings & Import** (bottom left)
 3. Click **+ Import Calendar**
-4. Select the generated `.ics` file
-5. The tasks will appear in your Tasks app
+4. Import each `.ics` file separately - each will create a separate task list
+5. The tasks will appear in your Tasks app organized by list
 
 ## Example Output
 
 ```
 ✓ Conversion complete!
-  Total tasks: 84
-  - Incomplete: 50
-  - Completed: 34
+  Total tasks: 87
+  - Incomplete: 51
+  - Completed: 36
+  Files created: 5
 
-Import this file into Nextcloud Tasks via:
+Output directory: ./output
+
+Import these files into Nextcloud Tasks via:
   Calendar app → Settings & Import → Import Calendar
+  (Import each .ics file separately to create separate task lists)
 ```
+
+Each RTM list becomes a separate `.ics` file:
+- `Personal.ics`
+- `Inbox.ics`
+- `Technology.ics`
+- `House.ics`
+- etc.
 
 ## Data Mapping
 

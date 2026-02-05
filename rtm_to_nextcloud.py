@@ -175,61 +175,23 @@ def convert_task_to_vtodo(task, lists, notes_by_series):
     if task.get('postponed'):
         lines.append(f'X-RTM-POSTPONE-COUNT:{task["postponed"]}')
     
-    if task.get('source'):
-        source = escape_ical_text(task['source'])
-        lines.append(f'X-RTM-SOURCE:{source}')
-    
     lines.append('END:VTODO')
-    return '\r\n'.join(lines)
-
-
-def convert_rtm_to_ics(rtm_data):
-    """Convert RTM export to VCALENDAR format."""
-    lines = []
-    
-    # VCALENDAR header
-    lines.append('BEGIN:VCALENDAR')
-    lines.append('VERSION:2.0')
-    lines.append('PRODID:-//RTM to Nextcloud Converter//EN')
-    lines.append('CALSCALE:GREGORIAN')
-    lines.append('X-WR-CALNAME:RTM Tasks')
-    
-    # Build list ID to name mapping
-    lists = {}
-    if rtm_data.get('lists'):
-        for lst in rtm_data['lists']:
-            lists[str(lst['id'])] = lst['name']
-    
-    # Build notes mapping by series_id
-    notes_by_series = {}
-    if rtm_data.get('notes'):
-        for note in rtm_data['notes']:
-            series_id = str(note.get('series_id', ''))
-            if series_id:
-                if series_id not in notes_by_series:
-                    notes_by_series[series_id] = []
-                notes_by_series[series_id].append(note)
-    
-    # Convert each task to VTODO
-    tasks = rtm_data.get('tasks', [])
-    for task in tasks:
-        lines.append(convert_task_to_vtodo(task, lists, notes_by_series))
-    
-    # VCALENDAR footer
-    lines.append('END:VCALENDAR')
-    
     return '\r\n'.join(lines)
 
 
 def main():
     if len(sys.argv) < 2:
-        print('Usage: python3 rtm_to_nextcloud.py <rtm_export.json> [output_file.ics]')
+        print('Usage: python rtm_to_nextcloud.py <rtm_export.json> [output_directory]')
         print()
         print('Converts Remember The Milk export to Nextcloud Tasks format (VCALENDAR/VTODO)')
+        print('Creates separate .ics files for each list in the specified output directory')
         sys.exit(1)
     
     input_file = Path(sys.argv[1])
-    output_file = Path(sys.argv[2]) if len(sys.argv) > 2 else input_file.with_suffix('.ics')
+    output_dir = Path(sys.argv[2]) if len(sys.argv) > 2 else input_file.parent
+    
+    # Create output directory if it doesn't exist
+    output_dir.mkdir(parents=True, exist_ok=True)
     
     try:
         # Read and parse RTM export
@@ -237,28 +199,87 @@ def main():
         with open(input_file, 'r', encoding='utf-8') as f:
             rtm_data = json.load(f)
         
-        # Convert to VCALENDAR format
+        # Build list ID to name mapping
+        lists = {}
+        if rtm_data.get('lists'):
+            for lst in rtm_data['lists']:
+                lists[str(lst['id'])] = lst['name']
+        
+        # Build notes mapping by series_id
+        notes_by_series = {}
+        if rtm_data.get('notes'):
+            for note in rtm_data['notes']:
+                series_id = str(note.get('series_id', ''))
+                if series_id:
+                    if series_id not in notes_by_series:
+                        notes_by_series[series_id] = []
+                    notes_by_series[series_id].append(note)
+        
+        # Group tasks by list_id
+        tasks_by_list = {}
+        for task in rtm_data.get('tasks', []):
+            list_id = str(task.get('list_id', ''))
+            if list_id not in tasks_by_list:
+                tasks_by_list[list_id] = []
+            tasks_by_list[list_id].append(task)
+        
+        # Convert each list to a separate ICS file
         print('Converting tasks to VCALENDAR/VTODO format...')
-        ics_content = convert_rtm_to_ics(rtm_data)
+        total_tasks = 0
+        total_incomplete = 0
+        total_completed = 0
+        files_created = []
         
-        # Write output
-        print(f'Writing Nextcloud Tasks file to: {output_file}')
-        with open(output_file, 'w', encoding='utf-8') as f:
-            f.write(ics_content)
+        for list_id, tasks in tasks_by_list.items():
+            list_name = lists.get(list_id, f'List-{list_id}')
+            
+            # Sanitize filename (remove invalid characters)
+            safe_name = "".join(c if c.isalnum() or c in (' ', '-', '_') else '_' for c in list_name)
+            output_file = output_dir / f'{safe_name}.ics'
+            
+            # Create VCALENDAR for this list
+            lines = []
+            lines.append('BEGIN:VCALENDAR')
+            lines.append('VERSION:2.0')
+            lines.append('PRODID:-//RTM to Nextcloud Converter//EN')
+            lines.append('CALSCALE:GREGORIAN')
+            lines.append(f'X-WR-CALNAME:{escape_ical_text(list_name)}')
+            
+            # Convert each task in this list
+            for task in tasks:
+                lines.append(convert_task_to_vtodo(task, lists, notes_by_series))
+            
+            lines.append('END:VCALENDAR')
+            ics_content = '\r\n'.join(lines)
+            
+            # Write output file
+            with open(output_file, 'w', encoding='utf-8') as f:
+                f.write(ics_content)
+            
+            # Count stats
+            incomplete = sum(1 for t in tasks if not t.get('date_completed'))
+            completed = sum(1 for t in tasks if t.get('date_completed'))
+            
+            total_tasks += len(tasks)
+            total_incomplete += incomplete
+            total_completed += completed
+            files_created.append((output_file.name, len(tasks), incomplete, completed))
+            
+            print(f'  {list_name}: {len(tasks)} tasks -> {output_file.name}')
         
-        # Print statistics
-        tasks = rtm_data.get('tasks', [])
-        incomplete_tasks = sum(1 for t in tasks if not t.get('date_completed'))
-        completed_tasks = sum(1 for t in tasks if t.get('date_completed'))
-        
+        # Print summary
         print()
         print('✓ Conversion complete!')
-        print(f'  Total tasks: {len(tasks)}')
-        print(f'  - Incomplete: {incomplete_tasks}')
-        print(f'  - Completed: {completed_tasks}')
+        print(f'  Total tasks: {total_tasks}')
+        print(f'  - Incomplete: {total_incomplete}')
+        print(f'  - Completed: {total_completed}')
+        print(f'  Files created: {len(files_created)}')
         print()
-        print('Import this file into Nextcloud Tasks via:')
+        print(f'Output directory: {output_dir}')
+        print()
+        print('Import these files into Nextcloud Tasks via:')
         print('  Calendar app → Settings & Import → Import Calendar')
+        print('  (Import each .ics file separately to create separate task lists)')
         
     except Exception as e:
         print(f'Error: {e}', file=sys.stderr)
