@@ -86,22 +86,26 @@ def convert_task_to_vtodo(task, lists, notes_by_series):
         if priority > 0:
             lines.append(f'PRIORITY:{priority}')
     
+    # Determine if we need time components for dates
+    # iCalendar requires consistency: if one date has time, both should
+    has_due_time = task.get('date_due_has_time', False)
+    has_start_time = task.get('date_start_has_time', False)
+    use_time = has_due_time or has_start_time  # If either has time, use time for both
+    
     # DUE - due date
     if task.get('date_due'):
-        has_due_time = task.get('date_due_has_time', False)
-        due_date = format_datetime(task['date_due'], has_due_time)
+        due_date = format_datetime(task['date_due'], use_time)
         if due_date:
-            if has_due_time:
+            if use_time:
                 lines.append(f'DUE:{due_date}')
             else:
                 lines.append(f'DUE;VALUE=DATE:{due_date}')
     
     # DTSTART - start date
     if task.get('date_start'):
-        has_start_time = task.get('date_start_has_time', False)
-        start_date = format_datetime(task['date_start'], has_start_time)
+        start_date = format_datetime(task['date_start'], use_time)
         if start_date:
-            if has_start_time:
+            if use_time:
                 lines.append(f'DTSTART:{start_date}')
             else:
                 lines.append(f'DTSTART;VALUE=DATE:{start_date}')
