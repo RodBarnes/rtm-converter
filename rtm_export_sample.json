@@ -1603,6 +1603,43 @@
       "source": "android",
       "repeat_every": false,
       "tags": []
+    },
+    {
+      "id": "1183840712",
+      "series_id": "583086752",
+      "list_id": "13851592",
+      "name": "Take fish oil",
+      "priority": "P1",
+      "date_created": 1755404585538,
+      "date_added": 1770246222031,
+      "date_modified": 1770253270947,
+      "date_due": 1770332400000,
+      "date_due_has_time": true,
+      "date_start_has_time": false,
+      "postponed": 0,
+      "source": "android",
+      "repeat": "FREQ=DAILY;INTERVAL=1;WKST=SU",
+      "repeat_every": true,
+      "tags": []
+    },
+    {
+      "id": "709028084",
+      "series_id": "405425926",
+      "list_id": "13851591",
+      "name": "Channels",
+      "priority": "PN",
+      "date_created": 1580336188061,
+      "date_added": 1580336188061,
+      "date_modified": 1730930043163,
+      "date_completed": 1580843221846,
+      "date_due": 1580799600000,
+      "date_due_has_time": false,
+      "date_start": 1580281200000,
+      "date_start_has_time": false,
+      "postponed": 1,
+      "source": "android",
+      "repeat_every": false,
+      "tags": []
     }
   ],
   "tags": [
@@ -1652,6 +1689,26 @@
     }
   ],
   "notes": [
+    {
+      "id": "78166220",
+      "series_id": "405425926",
+      "date_created": 1580337138906,
+      "date_modified": 1580337138906,
+      "title": "",
+      "content": "4.1 KXLY-HD\n4.2 KXLY4. 2\n4.3 KXLY4. 3\n6.1 KHQ-HD\n6.2 KHQ-SWX\n7.1 KSPS-HD\n7.2 KSPS Wo\n7.3 KSPS Cr\n7.4 KIDS\n22.1 KSKN-HD\n22.2 Laff\n22.3 Quest\n28.1 KAYU-HD\n28.2 MyNetTV",
+      "creator_id": "2146034",
+      "last_editor_id": "2146034"
+    },
+    {
+      "id": "78166095",
+      "series_id": "405425926",
+      "date_created": 1580336358699,
+      "date_modified": 1580336358699,
+      "title": "",
+      "content": "2 KREM (CBS)\n4 KXLY (ABC)\n6 KHQ (NBC)\n7 KSPS (PBS)\n22 KSKN (CW)\n28 KAYU (FOX)\n34 KGPX (ION)",
+      "creator_id": "2146034",
+      "last_editor_id": "2146034"
+    },
     {
       "id": "113561067",
       "series_id": "586667082",
