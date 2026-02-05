@@ -69,9 +69,22 @@ String convertRtmToIcs(Map<String, dynamic> rtmData) {
     }
   }
   
+  // Build notes mapping by series_id
+  final notesBySeries = <String, List<Map<String, dynamic>>>{};
+  if (rtmData.containsKey('notes')) {
+    for (final note in rtmData['notes'] as List<dynamic>) {
+      final noteMap = note as Map<String, dynamic>;
+      final seriesId = noteMap['series_id']?.toString() ?? '';
+      if (seriesId.isNotEmpty) {
+        notesBySeries.putIfAbsent(seriesId, () => []);
+        notesBySeries[seriesId]!.add(noteMap);
+      }
+    }
+  }
+  
   // Convert each task
   for (final task in tasks) {
-    buffer.write(convertTaskToVtodo(task as Map<String, dynamic>, lists));
+    buffer.write(convertTaskToVtodo(task as Map<String, dynamic>, lists, notesBySeries));
   }
   
   // VCALENDAR footer
@@ -80,7 +93,7 @@ String convertRtmToIcs(Map<String, dynamic> rtmData) {
   return buffer.toString().replaceAll('\n', '\r\n');
 }
 
-String convertTaskToVtodo(Map<String, dynamic> task, Map<String, String> lists) {
+String convertTaskToVtodo(Map<String, dynamic> task, Map<String, String> lists, Map<String, List<Map<String, dynamic>>> notesBySeries) {
   final buffer = StringBuffer();
   buffer.writeln('BEGIN:VTODO');
   
@@ -192,13 +205,13 @@ String convertTaskToVtodo(Map<String, dynamic> task, Map<String, String> lists) 
     buffer.writeln('CATEGORIES:$cats');
   }
   
-  // DESCRIPTION - combine all notes
+  // DESCRIPTION - combine all notes for this task's series_id
   final descriptionParts = <String>[];
   
-  if (task.containsKey('notes') && task['notes'] != null) {
-    for (final note in task['notes'] as List<dynamic>) {
-      final noteMap = note as Map<String, dynamic>;
-      final noteText = noteMap['text'] as String? ?? '';
+  final seriesId = task['series_id']?.toString() ?? '';
+  if (seriesId.isNotEmpty && notesBySeries.containsKey(seriesId)) {
+    for (final note in notesBySeries[seriesId]!) {
+      final noteText = note['text'] as String? ?? '';
       if (noteText.isNotEmpty) {
         descriptionParts.add(noteText);
       }

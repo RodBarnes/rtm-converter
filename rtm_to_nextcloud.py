@@ -61,7 +61,7 @@ def convert_recurrence(rtm_repeat):
     return rtm_repeat
 
 
-def convert_task_to_vtodo(task, lists):
+def convert_task_to_vtodo(task, lists, notes_by_series):
     """Convert a single RTM task to VTODO format."""
     lines = []
     lines.append('BEGIN:VTODO')
@@ -152,11 +152,12 @@ def convert_task_to_vtodo(task, lists):
         cats = ','.join(escape_ical_text(c) for c in categories)
         lines.append(f'CATEGORIES:{cats}')
     
-    # DESCRIPTION - combine all notes
+    # DESCRIPTION - combine all notes for this task's series_id
     description_parts = []
     
-    if task.get('notes'):
-        for note in task['notes']:
+    series_id = str(task.get('series_id', ''))
+    if series_id and series_id in notes_by_series:
+        for note in notes_by_series[series_id]:
             note_text = note.get('text', '')
             if note_text:
                 description_parts.append(note_text)
@@ -194,10 +195,20 @@ def convert_rtm_to_ics(rtm_data):
         for lst in rtm_data['lists']:
             lists[str(lst['id'])] = lst['name']
     
+    # Build notes mapping by series_id
+    notes_by_series = {}
+    if rtm_data.get('notes'):
+        for note in rtm_data['notes']:
+            series_id = str(note.get('series_id', ''))
+            if series_id:
+                if series_id not in notes_by_series:
+                    notes_by_series[series_id] = []
+                notes_by_series[series_id].append(note)
+    
     # Convert each task to VTODO
     tasks = rtm_data.get('tasks', [])
     for task in tasks:
-        lines.append(convert_task_to_vtodo(task, lists))
+        lines.append(convert_task_to_vtodo(task, lists, notes_by_series))
     
     # VCALENDAR footer
     lines.append('END:VCALENDAR')

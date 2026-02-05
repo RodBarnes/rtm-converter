@@ -102,6 +102,7 @@ Import this file into Nextcloud Tasks via:
 | `name` | `SUMMARY` | Task title |
 | `id` | `UID` | Unique identifier (prefixed with "rtm-") |
 | `parent_id` | `RELATED-TO` | Creates parent-child subtask relationships |
+| `series_id` | Used to match notes | Links tasks to their notes in the notes array |
 | `priority` | `PRIORITY` | P1→1, P2→5, P3→9 |
 | `date_due` | `DUE` | With or without time |
 | `date_start` | `DTSTART` | With or without time |
