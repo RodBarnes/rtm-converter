@@ -158,7 +158,8 @@ def convert_task_to_vtodo(task, lists, notes_by_series):
     series_id = str(task.get('series_id', ''))
     if series_id and series_id in notes_by_series:
         for note in notes_by_series[series_id]:
-            note_text = note.get('text', '')
+            # RTM exports use 'content' field for note text
+            note_text = note.get('content', '')
             if note_text:
                 description_parts.append(note_text)
     
