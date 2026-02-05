@@ -88,6 +88,13 @@ String convertTaskToVtodo(Map<String, dynamic> task, Map<String, String> lists) 
   final uid = 'rtm-${task['id']}';
   buffer.writeln('UID:$uid');
   
+  // RELATED-TO - for subtasks (parent-child relationship)
+  // RTM uses parent_id to indicate a task is a subtask
+  if (task.containsKey('parent_id') && task['parent_id'] != null) {
+    final parentUid = 'rtm-${task['parent_id']}';
+    buffer.writeln('RELATED-TO:$parentUid');
+  }
+  
   // SUMMARY - task name
   final summary = escapeIcalText(task['name'] ?? 'Untitled Task');
   buffer.writeln('SUMMARY:$summary');

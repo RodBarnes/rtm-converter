@@ -70,6 +70,12 @@ def convert_task_to_vtodo(task, lists):
     uid = f"rtm-{task['id']}"
     lines.append(f'UID:{uid}')
     
+    # RELATED-TO - for subtasks (parent-child relationship)
+    # RTM uses parent_id to indicate a task is a subtask
+    if task.get('parent_id'):
+        parent_uid = f"rtm-{task['parent_id']}"
+        lines.append(f'RELATED-TO:{parent_uid}')
+    
     # SUMMARY - task name
     summary = escape_ical_text(task.get('name', 'Untitled Task'))
     lines.append(f'SUMMARY:{summary}')

@@ -43,6 +43,7 @@ The converter handles:
 - ✅ Notes (converted to DESCRIPTION)
 - ✅ Tags (converted to CATEGORIES)
 - ✅ List names (added to CATEGORIES)
+- ✅ Subtasks (converted to RELATED-TO for parent-child relationships)
 - ✅ Metadata (postpone count, source)
 
 ## Usage
@@ -100,6 +101,7 @@ Import this file into Nextcloud Tasks via:
 |-----------|------------------------|-------|
 | `name` | `SUMMARY` | Task title |
 | `id` | `UID` | Unique identifier (prefixed with "rtm-") |
+| `parent_id` | `RELATED-TO` | Creates parent-child subtask relationships |
 | `priority` | `PRIORITY` | P1→1, P2→5, P3→9 |
 | `date_due` | `DUE` | With or without time |
 | `date_start` | `DTSTART` | With or without time |
@@ -135,7 +137,6 @@ The tool has been tested with:
 
 ## Limitations
 
-- **Subtasks**: RTM subtasks are not explicitly represented as parent-child relationships in VTODO. They appear as separate tasks.
 - **Contacts**: RTM contact assignments are not preserved (Nextcloud Tasks doesn't have a direct equivalent).
 - **Time estimates**: RTM time estimates are not converted.
 - **Locations**: RTM location data is not converted.
