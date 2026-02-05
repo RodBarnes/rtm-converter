@@ -40,32 +40,20 @@ The converter handles:
 - ✅ Unique identifiers (UID)
 
 ### Additional Data
-- ✅ Notes (converted to DESCRIPTION)
+- ✅ Notes (converted to DESCRIPTION, matched by series_id)
 - ✅ Tags (converted to CATEGORIES)
 - ✅ List names (added to CATEGORIES)
 - ✅ Subtasks (converted to RELATED-TO for parent-child relationships)
-- ✅ Metadata (postpone count, source)
+- ✅ Postpone count (converted to X-RTM-POSTPONE-COUNT)
 
 ## Usage
 
-### Python Version (Recommended)
-
 ```bash
 # Basic usage
-python3 rtm_to_nextcloud.py rtm_export.json
+python rtm_to_nextcloud.py rtm_export.json
 
 # Specify output file
-python3 rtm_to_nextcloud.py rtm_export.json my_tasks.ics
-```
-
-### Dart Version
-
-```bash
-# Basic usage
-dart rtm_to_nextcloud.dart rtm_export.json
-
-# Specify output file
-dart rtm_to_nextcloud.dart rtm_export.json my_tasks.ics
+python rtm_to_nextcloud.py rtm_export.json my_tasks.ics
 ```
 
 ## Exporting from RTM
@@ -115,34 +103,40 @@ Import this file into Nextcloud Tasks via:
 | `url` | `URL` | Task URL |
 | `tags` | `CATEGORIES` | Tags as comma-separated list |
 | `list_id` | `CATEGORIES` | List name added to categories |
-| `notes` | `DESCRIPTION` | All notes combined |
+| `notes` (array) | `DESCRIPTION` | Notes matched by series_id, combined with blank lines |
+| `postponed` | `X-RTM-POSTPONE-COUNT` | Number of times task was postponed |
+
+**Important Note on Date/Time Handling:** 
+iCalendar requires consistency in date formatting. If either `date_due_has_time` or `date_start_has_time` is True, both dates will be formatted with time components to ensure valid iCalendar format. This differs from RTM which allows mixed formats (e.g., start with time, due as all-day).
 
 ## Requirements
 
-### Python Version
 - Python 3.6 or higher
 - No additional dependencies (uses only standard library)
-
-### Dart Version
-- Dart SDK 2.12 or higher
-- No additional dependencies (uses only dart:core)
 
 ## Testing
 
 The tool has been tested with:
-- Sample RTM export containing 84 tasks
-- Tasks with various priorities
-- Recurring tasks
-- Tasks with notes
+- Sample RTM export containing 86+ tasks
+- Tasks with various priorities (P1, P2, P3, and no priority)
+- Recurring tasks with different frequencies
+- Tasks with notes (matched via series_id)
 - Completed and incomplete tasks
 - Tasks with URLs
 - Tasks with due dates (with and without times)
+- Tasks with start dates (with and without times)
+- Mixed date/time formats (start with time, due without time)
+- Subtasks and parent-child relationships
+- Tasks with postpone counts
+- Tasks spanning 15+ years of data
 
 ## Limitations
 
 - **Contacts**: RTM contact assignments are not preserved (Nextcloud Tasks doesn't have a direct equivalent).
 - **Time estimates**: RTM time estimates are not converted.
 - **Locations**: RTM location data is not converted.
+- **Source field**: The `source` field (indicating where task was created) is not converted as it provides no value after migration.
+- **repeat_every**: This boolean flag is redundant (RRULE contains all recurrence information) and is not converted.
 
 ## Troubleshooting
 
