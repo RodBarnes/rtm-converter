@@ -104,8 +104,10 @@ Import this file into Nextcloud Tasks via:
 | `parent_id` | `RELATED-TO` | Creates parent-child subtask relationships |
 | `series_id` | Used to match notes | Links tasks to their notes in the notes array |
 | `priority` | `PRIORITY` | P1→1, P2→5, P3→9 |
-| `date_due` | `DUE` | With or without time |
-| `date_start` | `DTSTART` | With or without time |
+| `date_due` | `DUE` | With or without time based on date_due_has_time |
+| `date_due_has_time` | `DUE` format | True: includes time, False: date only (VALUE=DATE) |
+| `date_start` | `DTSTART` | With or without time based on date_start_has_time |
+| `date_start_has_time` | `DTSTART` format | True: includes time, False: date only (VALUE=DATE) |
 | `date_completed` | `COMPLETED`, `STATUS` | Sets STATUS:COMPLETED |
 | `date_created` | `CREATED` | ISO 8601 timestamp |
 | `date_modified` | `LAST-MODIFIED` | ISO 8601 timestamp |
