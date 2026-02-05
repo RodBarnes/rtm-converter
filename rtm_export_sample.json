@@ -111,6 +111,25 @@
   },
   "tasks": [
     {
+      "id": "427817693",
+      "series_id": "251532538",
+      "list_id": "13851592",
+      "name": "Concert trip",
+      "priority": "PN",
+      "date_created": 1422334249595,
+      "date_added": 1422334249595,
+      "date_modified": 1730930043163,
+      "date_completed": 1422838861985,
+      "date_due": 1422342000000,
+      "date_due_has_time": false,
+      "date_start": 1422280800000,
+      "date_start_has_time": true,
+      "postponed": 0,
+      "source": "js",
+      "repeat_every": false,
+      "tags": []
+    },
+    {
       "id": "1174442517",
       "series_id": "595613855",
       "list_id": "13851591",
@@ -129,15 +148,15 @@
       "tags": []
     },
     {
-      "id": "1180454432",
-      "series_id": "563808552",
-      "list_id": "13953604",
+      "id": "1178969123",
+      "series_id": "563527723",
+      "list_id": "13851591",
       "name": "Dust",
       "priority": "P2",
-      "date_created": 1738180884562,
-      "date_added": 1768806072745,
-      "date_modified": 1769018587200,
-      "date_due": 1770015600000,
+      "date_created": 1737906118185,
+      "date_added": 1768115208752,
+      "date_modified": 1769324479084,
+      "date_due": 1769324400000,
       "date_due_has_time": false,
       "date_start_has_time": false,
       "postponed": 0,
@@ -147,15 +166,15 @@
       "tags": []
     },
     {
-      "id": "1178969123",
+      "id": "1181589572",
       "series_id": "563527723",
       "list_id": "13851591",
       "name": "Dust",
       "priority": "P2",
       "date_created": 1737906118185,
-      "date_added": 1768115208752,
-      "date_modified": 1768486105196,
-      "date_due": 1769324400000,
+      "date_added": 1769324479084,
+      "date_modified": 1769324479084,
+      "date_due": 1770534000000,
       "date_due_has_time": false,
       "date_start_has_time": false,
       "postponed": 0,
@@ -1689,6 +1708,16 @@
     }
   ],
   "notes": [
+    {
+      "id": "45090457",
+      "series_id": "251532538",
+      "date_created": 1422334290132,
+      "date_modified": 1422334290132,
+      "title": "",
+      "content": "March 6 in Baltimore \nFlight is about $300 round trip \nTickets are $30-60, still some down front",
+      "creator_id": "2146034",
+      "last_editor_id": "2146034"
+    },
     {
       "id": "78166220",
       "series_id": "405425926",
