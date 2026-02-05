@@ -172,8 +172,8 @@ def convert_task_to_vtodo(task, lists, notes_by_series):
         lines.append(f'DESCRIPTION:{description}')
     
     # Custom properties for RTM-specific data
-    if task.get('postpone_count'):
-        lines.append(f'X-RTM-POSTPONE-COUNT:{task["postpone_count"]}')
+    if task.get('postponed'):
+        lines.append(f'X-RTM-POSTPONE-COUNT:{task["postponed"]}')
     
     if task.get('source'):
         source = escape_ical_text(task['source'])
