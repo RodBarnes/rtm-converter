@@ -88,7 +88,7 @@ def convert_task_to_vtodo(task, lists, notes_by_series):
     
     # DUE - due date
     if task.get('date_due'):
-        has_due_time = task.get('has_due_time', False)
+        has_due_time = task.get('date_due_has_time', False)
         due_date = format_datetime(task['date_due'], has_due_time)
         if due_date:
             if has_due_time:
@@ -98,7 +98,7 @@ def convert_task_to_vtodo(task, lists, notes_by_series):
     
     # DTSTART - start date
     if task.get('date_start'):
-        has_start_time = task.get('has_start_time', False)
+        has_start_time = task.get('date_start_has_time', False)
         start_date = format_datetime(task['date_start'], has_start_time)
         if start_date:
             if has_start_time:
