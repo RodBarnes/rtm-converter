@@ -48,27 +48,29 @@ The converter handles:
 
 ## Usage
 
+**Note:** RTM export files are typically named like `rememberthemilk_export_2026-02-05T20_17_19.767Z.json`. Replace `<rtm-export.json>` in the examples below with your actual export filename.
+
 ```bash
 # Basic usage - creates separate .ics files for each list in the same directory as the input
-python rtm_to_nextcloud.py rtm_export.json
+python rtm_to_nextcloud.py <rtm-export.json>
 
 # Specify output directory
-python rtm_to_nextcloud.py rtm_export.json /path/to/output/directory
+python rtm_to_nextcloud.py <rtm-export.json> /path/to/output/directory
 
 # Only convert incomplete tasks (skip all completed tasks)
-python rtm_to_nextcloud.py rtm_export.json --incomplete-only
+python rtm_to_nextcloud.py <rtm-export.json> --incomplete-only
 
 # Skip old completed tasks (keep recent completions)
-python rtm_to_nextcloud.py rtm_export.json --skip-completed-before 2020-01-01
+python rtm_to_nextcloud.py <rtm-export.json> --skip-completed-before 2020-01-01
 
 # Convert only specific lists
-python rtm_to_nextcloud.py rtm_export.json --lists "Personal,Work,Shopping"
+python rtm_to_nextcloud.py <rtm-export.json> --lists "Personal,Work,Shopping"
 
 # Exclude certain lists
-python rtm_to_nextcloud.py rtm_export.json --exclude-lists "Archive,Someday"
+python rtm_to_nextcloud.py <rtm-export.json> --exclude-lists "Archive,Someday"
 
 # Combine multiple filters
-python rtm_to_nextcloud.py rtm_export.json output/ --incomplete-only --lists "Personal,Work"
+python rtm_to_nextcloud.py <rtm-export.json> output/ --incomplete-only --lists "Personal,Work"
 ```
 
 The converter creates a separate `.ics` file for each RTM list, allowing you to import them as separate task lists in Nextcloud.
