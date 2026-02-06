@@ -54,9 +54,33 @@ python rtm_to_nextcloud.py rtm_export.json
 
 # Specify output directory
 python rtm_to_nextcloud.py rtm_export.json /path/to/output/directory
+
+# Only convert incomplete tasks (skip all completed tasks)
+python rtm_to_nextcloud.py rtm_export.json --incomplete-only
+
+# Skip old completed tasks (keep recent completions)
+python rtm_to_nextcloud.py rtm_export.json --skip-completed-before 2020-01-01
+
+# Convert only specific lists
+python rtm_to_nextcloud.py rtm_export.json --lists "Personal,Work,Shopping"
+
+# Exclude certain lists
+python rtm_to_nextcloud.py rtm_export.json --exclude-lists "Archive,Someday"
+
+# Combine multiple filters
+python rtm_to_nextcloud.py rtm_export.json output/ --incomplete-only --lists "Personal,Work"
 ```
 
 The converter creates a separate `.ics` file for each RTM list, allowing you to import them as separate task lists in Nextcloud.
+
+### Filter Options
+
+- `--incomplete-only` - Only convert incomplete tasks, skip all completed tasks
+- `--skip-completed-before DATE` - Skip completed tasks older than the specified date (format: YYYY-MM-DD)
+- `--lists LIST1,LIST2` - Only convert the specified lists (comma-separated list names)
+- `--exclude-lists LIST1,LIST2` - Exclude the specified lists (comma-separated list names)
+
+Filters can be combined to create exactly the subset of tasks you want to import.
 
 ## Exporting from RTM
 
