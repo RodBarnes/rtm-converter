@@ -156,7 +156,7 @@ iCalendar requires consistency in date formatting. If either `date_due_has_time`
 ## Testing
 
 The tool has been tested with:
-- Sample RTM export containing 86+ tasks
+- Sample RTM export containing 86+ tasks designed to exercise all RTM features
 - Tasks with various priorities (P1, P2, P3, and no priority)
 - Recurring tasks with different frequencies
 - Tasks with notes (matched via series_id)
